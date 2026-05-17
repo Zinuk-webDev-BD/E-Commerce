@@ -8,4 +8,7 @@ route.get("/", (req, res) => {
 route.use("/auth", require("./authRoute"));
 
 module.exports = route;
+
+
+
 // mongodb+srv://node2601-ecommerce:39xQFcIIri5o6ywO@cluster0.hppyt.mongodb.net/E-Commerce?appName=Cluster0
