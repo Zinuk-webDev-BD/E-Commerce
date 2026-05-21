@@ -24,5 +24,10 @@ route.put(
   upload.single("avatar"),
   updateProfile,
 );
-route.get("/userlist", authMiddleware, roleCheck(["admin"]), userList);
+route.get(
+  "/userlist",
+  authMiddleware,
+  roleCheck(["admin", "moderator"]),
+  userList,
+);
 module.exports = route;
