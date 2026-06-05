@@ -9,4 +9,4 @@ route.use("/auth", require("./authRoute"));
 route.use("/category", require("./categoryRoute"));
 route.use("/product", require("./productRoute"));
 module.exports = route;
-// mongodb+srv://node2601-ecommerce:39xQFcIIri5o6ywO@cluster0.hppyt.mongodb.net/node2601-ecommerce?appName=Cluster0
+// mongodb+srv://E-Commerce:39xQFcIIri5o6ywO@cluster0.hppyt.mongodb.net/E-Commerce?appName=Cluster0
