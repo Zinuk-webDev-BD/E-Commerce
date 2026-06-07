@@ -1,3 +1,7 @@
+const { uploadToCloudinary } = require("../helpers/utils");
+const categorySchema = require("../models/categorySchema");
+const productSchema = require("../models/productSchema");
+
 const createProduct = async (req, res) => {
   try {
     const {
@@ -11,6 +15,9 @@ const createProduct = async (req, res) => {
       tags,
       isActive,
     } = req.body;
+
+    const thumbnail = req.files?.thumbnail;
+    const images = req.files?.images;
 
     if (!title)
       return res.status(400).send({ message: "Product title is required" });
@@ -34,7 +41,7 @@ const createProduct = async (req, res) => {
 
     // Validation of product variants
 
-    const variantsData = variants;
+    const variantsData = JSON.parse(variants); // This json data is temporary, comming from postman, will be change in real frondend
 
     if (!Array.isArray(variantsData) || variantsData.length === 0)
       return res
@@ -57,7 +64,47 @@ const createProduct = async (req, res) => {
     const skus = variantsData.map((v) => v.sku);
     if (new Set(skus).size !== skus.length)
       return res.status(400).send({ message: "SUK must unique" });
-  } catch (error) {}
+
+    // Images validation and upload
+
+    if (!thumbnail || thumbnail.length === 0)
+      return res.status(400).send({ message: "Product thumbnail is required" });
+    if (!images || images.length === 0)
+      return res.status(400).send({ message: "Product images are required" });
+
+    const thumbnailUrl = await uploadToCloudinary({
+      mimetype: thumbnail[0].mimetype,
+      imgBuffer: thumbnail[0].buffer,
+    });
+
+    const imgsRes = images.map(async (item) => {
+      return uploadToCloudinary({
+        mimetype: item.mimetype,
+        imgBuffer: item.buffer,
+      });
+    });
+    const imagesUrls = await Promise.all(imgsRes);
+
+    const productData = await productSchema.create({
+      title,
+      slug,
+      description,
+      category,
+      price,
+      discountPercentage,
+      variants: variantsData,
+      tags,
+      isActive,
+      thumbnail: thumbnailUrl,
+      images: imagesUrls,
+    });
+
+    res
+      .status(200)
+      .send({ message: "Product created successfully", productData });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = { createProduct };

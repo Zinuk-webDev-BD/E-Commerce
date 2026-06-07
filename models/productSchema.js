@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const variants = new mongoose.Schema({
+const variantsSchema = new mongoose.Schema({
   sku: {
     type: String,
     required: true,
@@ -48,7 +48,7 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    variants: [variants],
+    variants: [variantsSchema],
     tags: [
       {
         type: String,
