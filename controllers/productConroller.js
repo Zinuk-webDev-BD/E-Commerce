@@ -65,7 +65,7 @@ const createProduct = async (req, res) => {
     if (new Set(skus).size !== skus.length)
       return res.status(400).send({ message: "SUK must unique" });
 
-    // Images validation and upload
+    // validation and upload for images
 
     if (!thumbnail || thumbnail.length === 0)
       return res.status(400).send({ message: "Product thumbnail is required" });
