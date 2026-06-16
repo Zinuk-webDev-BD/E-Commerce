@@ -10,6 +10,22 @@ const generateOTP = () => {
   return crypto.randomInt(1000, 10000).toString();
 };
 
+
+const generateResetPassToken = () => {
+  const resetToken = crypto.randomBytes(16).toString("hex");
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  return { resetToken, hashedToken };
+};
+
+const hashResetToken = (token) => {
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+  return hashedToken;
+};
+
 const generateAccessToken = (user) => {
   return jwt.sign(
     {
@@ -57,5 +73,7 @@ module.exports = {
   generateAccessToken,
   generateRefreshToken,
   uploadToCloudinary,
-  destroyFromCloudinary
+  destroyFromCloudinary,
+  generateResetPassToken,
+  hashResetToken
 };
